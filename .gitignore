@@ -19,3 +19,4 @@ data/*
 
 # scripts for playful exploratory data analysis
 eda??.R
+eda??.Rmd
