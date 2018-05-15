@@ -1,0 +1,21 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+
+# html files
+*.html
+
+# cache
+storm_data_analysis_cache/*
+
+# Data Folder (often too big for Github)
+data/*
+
+# documentation
+# *.pdf
+
+# scripts for playful exploratory data analysis
+eda??.R
