@@ -18,5 +18,6 @@ data/*
 # *.pdf
 
 # scripts for playful exploratory data analysis
-eda??.R
-eda??.Rmd
+eda_??.R
+eda_??.*
+eda_*
