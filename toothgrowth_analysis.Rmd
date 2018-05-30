@@ -1,0 +1,225 @@
+---
+output: 
+  pdf_document:
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+title: "Basic inferential data analysis of ToothGrowth dataset"
+abstract: "***This document provides the assignment 'Course Project Part 2' for Coursera's Statistical Inference Class in the Coursera Data Science series. Replication files are available on the author's Github account (https://github.com/tomfischersz).***"
+author: "Thomas Fischer"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+linkcolor: "blue"
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(fig.pos= "h", out.extra = '')
+```
+
+
+```{r ref.label="req_libraries", echo=FALSE, eval=TRUE, include=FALSE}
+```
+```{r ref.label="load_data", echo=FALSE, eval=TRUE}
+```
+```{r ref.label="treatment_variable", echo=FALSE, eval=TRUE}
+```
+```{r ref.label="data_summary", echo=FALSE, eval=TRUE}
+```  
+```{r ref.label="fig_1", echo=FALSE, eval=TRUE}
+```
+```{r ref.label="fig_2", echo=FALSE, eval=TRUE}
+```
+```{r ref.label="ttest_1", echo=FALSE,eval=TRUE}
+```
+```{r ref.label="ttest_2", echo=FALSE,eval=TRUE}
+```
+
+# 1. Synopsis
+
+In this report we aim to conduct some basic inferential data analysis on the ToothGrowth dataset of the R library 'datasets'. We aim to answer the question, if dosage and/or delivery method of vitamin C affects tooth growth in guinea pigs. We therefore observe patterns from the data, formulate hypotheses and then use statistical tests like confident intervals or student's t-test to validate these hypotheses.
+
+# 2. The ToothGrowth Data Set
+
+The data consists of 60 observations with 3 variables, here the first few observations:
+```{r ref.label="show_obs", echo=FALSE, eval=TRUE}
+```
+
+The help page[^1] for the data set ToothGrowth gives following description:  
+
+>The response is the length of odontoblasts (cells responsible for tooth growth) in 60 guinea pigs. Each animal received one of three dose levels of vitamin C (0.5, 1, and 2 mg/day) by one of two delivery methods, (orange juice or ascorbic acid (a form of vitamin C and coded as VC).  
+
+Our data are results from a study performed on guinea pigs to determine the effect of vitamin C on tooth growth. The data contains 3 variables:  
+
+* **len:** The response (dependent) variable for the experiment measured for 60 guinea pigs is the tooth length.
+* **supp** and **dose** Two factors (independent variables), the delivery method of the vitamin C (supplement type) and the dose levels of vitamin C in mg/day. We are interested in the effect of these two factors on the response.  
+
+Table \ref{tab:data_summary} depicts a aggregated summary of our data. We can see that there are 6 factor-level combinations and each of these 6 combinations were applied to 10 guinea pigs each. We hereafter call this different combinations just treatment (and also added a new column), e.g. "OJ_0.5" just denotes the treatment with the factors 'Orange Juice' with a dose level of 0.5 mg/day.
+
+[^1]: Use R command help(ToothGrowth) to get further information.
+
+# 3.Exploratory Data Analysis
+
+We now visualize the means and spread of tooth growth for our six distinct treatment groups ([Code](#Appendix_1)):
+```{r plot_fig_1, echo=FALSE,fig.height=3.75,fig.width=5, fig.show='hold',fig.align='center',fig.cap="\\label{fig:boxplot_1}Comparing the possible effects of three varying doses of vitamin C for the two different supplement types (Orange Juice and Vitamin C)."}
+plot(fig_1)
+```
+
+Figure \ref{fig:boxplot_1} suggests that the dose and the delivery method both have some effect on the tooth growth. It appears that the average tooth growth increases with the dose levels and that orange juice might have higher growth rates than Vitamin C except for dose levels of 2 mg.
+
+# 4. Basic Inference Analysis (hypothesis tests)
+
+We are now testing several hypotheses. Our significance level (i.e. the risk of getting a Type I error) for all tests will be $\alpha=0.05$. We strictly only use student t-tests as required in the assignment (disregarding regression analysis and anova test).  
+
+## 4.1 Assumptions
+
+Before proceeding in our analysis it is important to assure certain assumptions necessary to apply student's t-test, so we must be sure that following assumptions are not violated:  
+
+* Independent and identically distributed: We are assuming that the process of choosing 60 guinea pigs for the experiment was independed and that they are drawn from the same population. Otherwise our results would be not reliable, e.g. if the guinea pigs origin from two different breeders, or there are differences in male and female populations our conclusions could be flawed.
+
+* The probability distributions of the measured tooth length for each treatment are normal. Depicting Figure \ref{fig:fig_2} it seems that this assumption appears to be reasonably satisfied.
+
+## 4.2 Hypothesis Test I
+
+We want to test the null hypothesis that the mean tooth length for the two delivery methods are equal against the alternative hypothesis that they differ:  
+
+$H_0:\mu_{OJ}=\mu_{VC}$  
+$H_a:\mu_{OJ}\neq\mu_{VC}$  
+
+Stated the relevant null and alternative hypotheses, we then conduct a two-tailed t-test ([Code](#Appendix_2)):
+```{r print_ttest_1, eval=TRUE, echo=FALSE}
+print(t_01)
+```
+As the obtained p-value of `r round(t_01$p.value ,3)` is greater than the significance level of 0.05 (and the confidence interval at 95% contains 0) we cannot reject our null hypothesis. Looking at figure \ref{fig:boxplot_1} again, failing to reject the null hypothesis is likely due to the similar results in tooth length for a vitamin C dose of 2 mg/day.
+
+## 4.2 Hypothesis Test II
+
+Our next hypothesis test will be examining if, for orange juice only, higher doses of vitamin C are significantly associated with higher tooth length. We are conducting two one-tailed t-tests and therefore need to adjust our confidence intervals. We adjust the original confidence level of our tests of 95% using Bonferroni correction to $1-\frac{\alpha}{m}=0.975$, where $m$ is the number of hypotheses. Our new significance level is $\alpha=0.025$.
+
+$H_0:\mu_{OJ\_0.5}=\mu_{OJ\_1}=\mu_{OJ\_2}$  
+$H_a:$ $\mu_{OJ\_0.5}<=\mu_{OJ\_1}<=\mu_{OJ\_2}$  
+
+Conducted the relevant t-test ([Code](#Appendix_3)) we get following results:
+```{r print_sum_ttests, echo=FALSE}
+kable(sum_ttests,
+      format = 'latex',
+      booktabs = TRUE,
+      digits = 2,
+      caption = 'Summary of t-tests for different levels of doses (Orange Juice)\\label{tab:sum_ttests}',
+      col.names = c('Sample Groups', 'p-values',
+                    'Lower Conf.Interval', 'Upper Conf.Interval' )) %>%
+    kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+As we can see, both p-values are below our significance level $\alpha=0.025$ and both confidence intervals for the difference of means for the treatments are below zeros. We therefore can conclude to reject the null hypothesis, i.e. for orange juice we examine different effects depending on the dose of vitamin C.
+
+## 5. Conclusion
+
+* No evidence for the hypothesis that tooth length differs for different delivery methods.
+* Strong evidence that tooth length varies for different doses given the delivery method orange juice.
+
+\newpage
+
+# Appendix I: Figures and Tables
+
+```{r show_df_summary, echo=FALSE, eval=TRUE}
+kable(df_summary,
+      format = 'latex',
+      booktabs = TRUE,
+      digits = 2,
+      caption = 'Summary of the different treatments for the guinea pigs with
+      their associated average tooth length and the corresponding standard
+      deviation\\label{tab:data_summary}',
+      col.names = c('Supplement', 'Dose (mg/day)',
+                    'Treatment', 'N (number of pigs)',
+                    'Mean',
+                    'Standard Deviation')) %>%
+    kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+```{r plot_fig_2, echo=FALSE,fig.height=4,fig.width=5.5, fig.show='hold',fig.align='center',fig.cap="\\label{fig:fig_2}Density distributions for all treatment groups."}
+plot(fig_2)
+```
+
+# Appendix II: R Source Code
+
+### 1. Load required libraries:
+```{r req_libraries, eval=FALSE}
+require(knitr)
+require(kableExtra)
+require(datasets)
+require(ggplot2)
+require(dplyr)
+```
+
+### 2. Load data:
+```{r load_data, eval=FALSE}
+data(ToothGrowth)
+# names(ToothGrowth) <- c('length', 'supplement', 'dose')
+```
+
+### 3. Add new variable treatment:
+```{r treatment_variable, eval=FALSE}
+ToothGrowth$treatment=with(ToothGrowth,interaction(supp,dose, sep = '_'))
+```
+
+### 4. First few observations:
+```{r show_obs, eval=FALSE}
+kable(head(ToothGrowth[, 1:3], n=3),
+      format = 'latex',
+      booktabs = TRUE,
+      caption = "The first few observations of the data set 
+      ToothGrowth\\label{tab:show_obs}")  %>%
+    kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+### 5. Aggregating data in data.frame:
+```{r data_summary, eval=FALSE}
+df_summary <-
+    ToothGrowth %>%
+    group_by(supp, dose, treatment) %>%
+    summarise(N = n(),
+              mean_len = mean(len),
+              sd_len = sd(len)) %>%
+    as.data.frame()
+```
+
+### 6. Boxplots for different treatments:  {#Appendix_1}
+```{r fig_1, eval=FALSE}
+fig_1 <- ggplot(ToothGrowth, aes(x=factor(dose), y=len)) +
+    facet_grid(.~supp) +
+    geom_boxplot(aes(fill = supp), show.legend = FALSE) +
+    labs(title = "Guinea pig Tooth Length by Dosage for different treatments", 
+         x = "Dose (mg/day)",
+         y = "Tooth Length")
+```
+
+### 7. Distribution of Tooth Length for different treatments:
+```{r fig_2, eval=FALSE}
+fig_2 <- ggplot(ToothGrowth, aes(x = len)) +
+    geom_density(adjust = 1.5) + 
+    facet_wrap(~ treatment)
+```
+
+### 8. Hypothesis Test I  {#Appendix_2}
+```{r ttest_1, eval=TRUE}
+t_01 <- t.test(len~supp,data=ToothGrowth, paired = FALSE, var.equal = FALSE, alternative = 'two.sided')
+```
+
+### 9. Hypothesis Test II  {#Appendix_3}
+```{r ttest_2, eval=FALSE}
+t_02_1 <-
+    t.test(len~dose,
+           data = ToothGrowth[ToothGrowth$treatment %in% c('OJ_0.5', 'OJ_1'),],
+           paired = FALSE, var.equal = FALSE,
+           alternative = 'less', conf.level = 0.975)
+t_02_2 <-
+    t.test(len~dose,
+           data = ToothGrowth[ToothGrowth$treatment %in% c('OJ_1', 'OJ_2'),],
+           paired = FALSE, var.equal = FALSE,
+           alternative = 'less', conf.level = 0.975)
+sum_ttests <-
+    data.frame(sample_group = c('OJ_0.5 versus OJ_1', 'OJ_0.5 versus OJ_1'),
+               p_value = c(round(t_02_1$p.value,4), round(t_02_2$p.value,4)),
+               confint_lower = c(t_02_1$conf.int[[1]], t_02_2$conf.int[[1]]),
+               confint_upper = c(t_02_1$conf.int[[2]], t_02_2$conf.int[[2]]))
+```

@@ -126,7 +126,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{May 19, 2018}
+  \date{May 30, 2018}
 
 
 \begin{document}
@@ -138,13 +138,7 @@ Science series. Replication files are available on the author's Github
 account (\url{https://github.com/tomfischersz}).}}
 \end{abstract}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{knitr}\OperatorTok{::}\NormalTok{opts_chunk}\OperatorTok{$}\KeywordTok{set}\NormalTok{(}\DataTypeTok{echo =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{fig.pos=} \StringTok{"h"}\NormalTok{, }\DataTypeTok{out.extra =} \StringTok{''}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\subsection{1. Synopsis}\label{synopsis}
+\section{1. Synopsis}\label{synopsis}
 
 The aim of this report is to investigate the sampling distribution for
 \(\bar X_n\), derived as the mean from samples with size \(n\) from an
@@ -154,16 +148,16 @@ approximately normal with mean \(\mu_{\bar X} =\mu\) and standard
 deviation \(\sigma_{\bar X} =\)\(\frac{\sigma}{\sqrt{n}}\) (also called
 standard error of the mean).
 
-\subsection{2. Simulation}\label{simulation}
+\section{2. Simulation}\label{simulation}
 
 The first step is to simulate 1000 random variables each calculated as
 the mean of \(n = 40\) random exponential variables with population
 parameter \(\lambda = 0.2\) (rate). To generate random exponential
 variables we use the R function rexp(). The resulting 1000 sample means,
-which themselves are random variables, are stored in a vector (script
-can be found \protect\hyperlink{Appendix_1}{here}).
+which themselves are random variables, are stored in a vector
+(\protect\hyperlink{Appendix_1}{Code}).
 
-\subsection{3. Sample Mean versus Theoretical
+\section{3. Sample Mean versus Theoretical
 Mean}\label{sample-mean-versus-theoretical-mean}
 
 The theoretical mean is the population mean of our exponential
@@ -173,10 +167,8 @@ also know that the sampling distribution for \(\bar X_n\) is centered at
 \(\mu\), therefore \(\mu_{\bar X} = \frac{1}{\lambda}\). We can now
 compare this theoretical mean with the actual mean of the simulation of
 1000 means from samples of size 40
-(\protect\hyperlink{Appendix_1}{Code}).
-
-The following table shows, that the two calculated values are very close
-to each other:
+(\protect\hyperlink{Appendix_2}{Code}). The following table shows, that
+the two calculated values are very close to each other:
 
 \begin{longtable}[]{@{}lll@{}}
 \toprule
@@ -188,7 +180,7 @@ Theoretical\tabularnewline
 \bottomrule
 \end{longtable}
 
-\subsection{4. Sample Variance versus Theoretical
+\section{4. Sample Variance versus Theoretical
 Variance}\label{sample-variance-versus-theoretical-variance}
 
 We now have a closer look at the variability or spread of our sampling
@@ -210,11 +202,11 @@ Theoretical\tabularnewline
 \bottomrule
 \end{longtable}
 
-\subsection{5. Distribution}\label{distribution}
+\section{5. Distribution}\label{distribution}
 
-Finally we want to examine, if the distribution of our simulation of
-1000 averages of 40 random exponentials is approximately normal. In
-figure \ref{fig:fig_hist_2} we plot the histogram of our simulation data
+Finally we want to examine if the distribution of our simulation of 1000
+averages of 40 random exponentials is approximately normal. In figure
+\ref{fig:fig_hist_1} we plot the histogram of our simulation data
 together with the theoretical normal distribution we would except
 according to the CLT. In figure \ref{fig:fig_qqnorm} we plot a Q-Q
 (Quantile-Quantile) Plot, where we compare the theoretical quantiles
@@ -222,34 +214,35 @@ with observed quantiles.
 
 \begin{figure}[h]
 
-{\centering \includegraphics{exponential_distribution_files/figure-latex/plot_hist_2-1} 
+{\centering \includegraphics{exponential_distribution_files/figure-latex/plot_hist_1-1} 
 
 }
 
-\caption{\label{fig:fig_hist_2}Sampling distribution of the sample mean. The red line shows the standard normal pdf we would except according the CLT.}\label{fig:plot_hist_2}
+\caption{\label{fig:fig_hist_1}Sampling distribution of the sample mean. The red line shows the standard normal pdf we would except according the CLT.}\label{fig:plot_hist_1}
 \end{figure}
 
 \begin{figure}[h]
 
-{\centering \includegraphics{exponential_distribution_files/figure-latex/unnamed-chunk-6-1} 
+{\centering \includegraphics{exponential_distribution_files/figure-latex/unnamed-chunk-5-1} 
 
 }
 
-\caption{\label{fig:fig_qqnorm}Quantile-Quantile Plot of the observed sampling distribution of the sample mean versus a normal distribution with mean = 5 and standard deviation = 0.79.}\label{fig:unnamed-chunk-6}
+\caption{\label{fig:fig_qqnorm}Quantile-Quantile Plot of the observed sampling distribution of the sample mean versus a normal distribution with mean = 5 and standard deviation = 0.79.}\label{fig:unnamed-chunk-5}
 \end{figure}
 
-\subsection{6. Conclusion}\label{conclusion}
+\section{6. Conclusion}\label{conclusion}
 
-Both figure \ref{fig:fig_qqnorm} , showing a nearly linear plot and
-figure \ref{fig:fig_hist_2} , showing a density distribution that is
-quite normal, let us conclude that in fact our simulated distribution of
-1000 averages of 40 random exponential variables follows quite good a
-normal gaussian distribution. That is what we expected from the Central
-Limit Theorem.
+The histogram of our sample means in figure \ref{fig:fig_hist_1} shows a
+density distribution that is quite normal and the Q-Q Plot in figure
+\ref{fig:fig_qqnorm} shows a nearly linear plot. That let us conclude
+that in fact our simulated distribution of 1000 averages of 40 random
+exponential variables follows quite good a normal gaussian distribution
+\({N}(5, \frac{5}{\sqrt{40}})\). That is what we expected from the
+Central Limit Theorem.
 
-\pagebreak
+\newpage
 
-\section{Appendix}\label{Appendix}
+\section{Appendix: R Source Code}\label{appendix-r-source-code}
 
 \hypertarget{Appendix_1}{\subsubsection{1. Code for creating our
 simulation:}\label{Appendix_1}}
@@ -264,8 +257,8 @@ simulation:}\label{Appendix_1}}
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{2. Calculating the theoretical mean and the mean of the
-1000 sample means:}\label{Appendix_2}
+\hypertarget{Appendix_2}{\subsubsection{2. Calculating the theoretical
+mean and the mean of the 1000 sample means:}\label{Appendix_2}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -276,26 +269,7 @@ simulation:}\label{Appendix_1}}
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{3. Histogram 1:}\label{Appendix_3}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{data.frame}\NormalTok{(sample_means), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{sample_means))}
-\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{color =} \StringTok{'black'}\NormalTok{, }\DataTypeTok{binwidth =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{fill =} \StringTok{'#51B5E0'}\NormalTok{)}
-\CommentTok{# g <- g + theme_minimal()}
-\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =}\NormalTok{ theoretical_mu, }\DataTypeTok{color =} \StringTok{'#F77F00'}\NormalTok{, }\DataTypeTok{size =} \DecValTok{1}\NormalTok{)}
-\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =}\NormalTok{ mu_sample_means, }\DataTypeTok{color =} \StringTok{'black'}\NormalTok{, }\DataTypeTok{size =} \DecValTok{1}\NormalTok{)}
-\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Sample Means"}\NormalTok{,}
-                        \DataTypeTok{y =} \StringTok{"Count"}\NormalTok{,}
-                        \DataTypeTok{title =} \StringTok{"Histogram of Sample Means"}\NormalTok{)}
-\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{annotate}\NormalTok{(}\DataTypeTok{geom =} \StringTok{'text'}\NormalTok{,}
-                            \DataTypeTok{label =} \KeywordTok{paste}\NormalTok{(}\StringTok{'Theoretical mean = '}\NormalTok{, theoretical_mu,}
-                                          \StringTok{"}\CharTok{\textbackslash{}n}\StringTok{ Actual mean = "}\NormalTok{, }\KeywordTok{round}\NormalTok{(mu_sample_means,}\DecValTok{2}\NormalTok{)),}
-                            \DataTypeTok{x =} \DecValTok{6}\NormalTok{, }\DataTypeTok{y =} \DecValTok{95}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{Appendix_4}{\subsubsection{4. Calculating theoretical and
+\hypertarget{Appendix_4}{\subsubsection{3. Calculating theoretical and
 actual variance:}\label{Appendix_4}}
 
 \begin{Shaded}
@@ -307,24 +281,24 @@ actual variance:}\label{Appendix_4}}
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{5. Histogram 2:}\label{Appendix_5}
+\subsubsection{4. Histogram 1:}\label{Appendix_5}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hist_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{data.frame}\NormalTok{(sample_means), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{sample_means))}
-\NormalTok{hist_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{2} \OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{color =} \StringTok{'black'}\NormalTok{, }\DataTypeTok{binwidth =} \FloatTok{0.2}\NormalTok{,}
+\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{data.frame}\NormalTok{(sample_means), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{sample_means))}
+\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{color =} \StringTok{'black'}\NormalTok{, }\DataTypeTok{binwidth =} \FloatTok{0.2}\NormalTok{,}
                                   \DataTypeTok{fill =} \StringTok{'#51B5E0'}\NormalTok{, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y=}\NormalTok{..density..))}
-\NormalTok{hist_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{2} \OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Sample Means"}\NormalTok{,}
+\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Sample Means"}\NormalTok{,}
                         \DataTypeTok{y =} \StringTok{"Density"}\NormalTok{,}
                         \DataTypeTok{title =} \StringTok{"Density Histogram of Sample Means"}\NormalTok{)}
-\NormalTok{hist_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{2} \OperatorTok{+}\StringTok{ }\KeywordTok{stat_function}\NormalTok{(}\DataTypeTok{fun =}\NormalTok{ dnorm,}
+\NormalTok{hist_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{hist_}\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{stat_function}\NormalTok{(}\DataTypeTok{fun =}\NormalTok{ dnorm,}
                                  \DataTypeTok{args =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{mean =}\NormalTok{ theoretical_mu,}
                                              \DataTypeTok{sd =} \KeywordTok{sqrt}\NormalTok{(theoretical_var)),}
                                  \DataTypeTok{colour =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{1}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{6. Q-Q Plot}\label{q-q-plot}
+\subsubsection{5. Q-Q Plot}\label{q-q-plot}
 
 \begin{Shaded}
 \begin{Highlighting}[]
